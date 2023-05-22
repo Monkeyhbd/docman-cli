@@ -1,0 +1,1 @@
+/** Stop DocMan CLI instance. */

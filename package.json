@@ -1,0 +1,15 @@
+{
+  "name": "docman-cli",
+  "version": "0.0.1",
+  "description": "CLI management tools of DocMan.",
+  "bin": {
+    "docman": "./main.js"
+  },
+  "keywords": [
+    "DocMan"
+  ],
+  "author": "Monkeyhbd",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

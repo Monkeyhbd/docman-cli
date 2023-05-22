@@ -1,0 +1,1 @@
+/** Show a registered DocMan instance's informations. */
