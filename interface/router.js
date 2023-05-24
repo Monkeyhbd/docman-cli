@@ -4,6 +4,7 @@ var map = {
 	'list': function() { return require('./commands/cmd_list').execute },
 	'register': function() { return require('./commands/cmd_register').execute },
 	'unregister': function() { return require('./commands/cmd_unregister').execute },
+	'show': function() { return require('./commands/cmd_show').execute },
 }
 
 

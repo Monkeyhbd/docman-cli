@@ -59,7 +59,10 @@ function allocateName(reg) {
 }
 
 
-/** Register into table. */
+/** Register into table.
+ * - `path` : Absolute path of a DocMan instance.
+ * - `name` : Name to indentify a DocMan instance.
+ */
 function registerLogic(path, name=undefined) {
 	var REG_PATH = './register.json'
 	var reg = {}
@@ -101,7 +104,10 @@ function registerLogic(path, name=undefined) {
 }
 
 
-/** Register a DocMan instance. */
+/** Register a DocMan instance.
+ * - `path` : Path to a DocMan instance.
+ * - `name` : Name to indentify a DocMan instance.
+ */
 function register(path, name=undefined) {
 	// Convert to absolute path.
 	if (pathType(path) == 'relative') {
@@ -155,6 +161,9 @@ function list() {
 }
 
 
+/** Read `.docman-cli/register.json` as object.
+ *  Return `{}` if file not exist.
+ */
 function readReg() {
 	// Read from register.json.
 	try {
@@ -169,18 +178,24 @@ function readReg() {
 }
 
 
+/** Write object into `.docman-cli/register.json`. */
 function writeReg(reg) {
 	var REG_PATH = './register.json'
 	UtilsFile.writeObjectAsJson(reg, REG_PATH, true)
 }
 
 
+/** Unregister a registered DocMan instance.
+ * - `alias` : Name or ID to match a registered DocMan instance.
+ */
 function unregister(alias) {
 	var reg = readReg()
 	var id = undefined
+	// Alias is ID.
 	if (reg[alias] != undefined) {
 		id = alias
 	}
+	// Alias is name.
 	else {
 		var id = match(reg, 'name', alias)
 	}
@@ -204,8 +219,31 @@ function unregister(alias) {
 }
 
 
+/** Match a record in `reg` object with `alias`. 
+ * - `reg`: Return of `readReg()`.
+ * - `alias` : Name or ID to match a registered DocMan instance.
+ * 
+ *  Return: Register infomation, `undefine` if nothing match `alias`.
+ */
+function getIdByAlias(reg, alias) {
+	var id = undefined
+	// Alias is ID.
+	if (reg[alias] != undefined) {
+		id = alias
+	}
+	// Alias is name.
+	else {
+		var id = match(reg, 'name', alias)
+	}
+	return id
+}
+
+
 module.exports = {
 	list: list,
 	register: register,
-	unregister: unregister
+	unregister: unregister,
+	readReg: readReg,
+	writeReg: writeReg,
+	getIdByAlias: getIdByAlias
 }

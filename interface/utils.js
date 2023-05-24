@@ -56,6 +56,41 @@ function prettyTable(fields=[{name: 'ID', key: 'id'}, {name: 'Document Name', ke
 }
 
 
+function prettyInfo(objs=[
+	{
+		key: 'Caches (sum of all)',
+		list: [
+			{
+				key: 'L1d',
+				value: '64 KiB (2 instances)'
+			},
+			{
+				key: 'L1i',
+				value: '64 KiB (2 instances)'
+			},
+			{
+				key: 'L2',
+				value: '512 KiB (2 instances)'
+			},
+			{
+				key: 'L3',
+				value: '3 MiB (1 instances)'
+			}
+		]
+	}
+], indent=2, initIndent=0) {
+	for (var idx = 0; idx < objs.length; idx += 1) {
+		var obj = objs[idx]
+		process.stdout.write(' '.repeat(initIndent))
+		process.stdout.write(`${obj.key || ''}: ${obj.value || ''}\n`)
+		// Recursive down.
+		if (obj.list != undefined) {
+			prettyInfo(obj.list, indent, initIndent + indent)
+		}
+	}
+}
+
+
 /** Determine the type of `arg` string. */
 function argStrType(arg) {
 	if (arg.length == 2 && arg[0] == '-') {
@@ -92,5 +127,6 @@ function matchArg(argv=['--name', 'DocMan Doc'], argDict={'--name': undefined, '
 
 module.exports = {
 	prettyTable: prettyTable,
+	prettyInfo: prettyInfo,
 	matchArg: matchArg
 }

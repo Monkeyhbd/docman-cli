@@ -13,6 +13,7 @@ SUBCOMMAND:
   create     : Create an DocMan instance.
   list       : List all registered DocMan instance.
   register   : Register a unregistered DocMan instance.
+  show       : Show informations of a DocMan instance.
   unregister : Unregister a registered DocMan instance.
 `
 
