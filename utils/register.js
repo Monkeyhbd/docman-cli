@@ -61,7 +61,7 @@ function allocateName(reg) {
 
 /** Register into table.
  * - `path` : Absolute path of a DocMan instance.
- * - `name` : Name to indentify a DocMan instance.
+ * - `name` : Name to indentify a DocMan instance in register table.
  */
 function registerLogic(path, name=undefined) {
 	var REG_PATH = './register.json'
@@ -106,7 +106,7 @@ function registerLogic(path, name=undefined) {
 
 /** Register a DocMan instance.
  * - `path` : Path to a DocMan instance.
- * - `name` : Name to indentify a DocMan instance.
+ * - `name` : Name to indentify a DocMan instance in register table.
  */
 function register(path, name=undefined) {
 	// Convert to absolute path.

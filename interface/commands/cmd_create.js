@@ -15,8 +15,8 @@ PATH:
   The path to create a DocMan instance.
 OPTIONS:
   --docman-repo   : Clone from a specific DocMan repository.
-  --git-repo | -g : Git repository's URL of document project.
-  --name | -n     : Name to indentify a DocMan instance.
+  --git-repo | -g : Git repository of your document project.
+  --name | -n     : Name to indentify a DocMan instance in register table.
   --no-register   : Do not register this instance.
 `
 
@@ -42,7 +42,9 @@ function execute(argv=['create', '--help']) {
 			'--no-register': undefined
 		}
 		matchArg(argv, argDict)
-		UtilsCreate.create(path, argDict['--name'] || argDict['-n'] || 'docman-instance')
+		UtilsCreate.create(path, argDict['--name'] || argDict['-n'] || 'docman-instance', {
+			docRepo: argDict['--git-repo'] || argDict['-g'] || undefined
+		})
 	}
 }
 
