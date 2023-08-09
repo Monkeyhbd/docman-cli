@@ -41,31 +41,51 @@ function cloneDoc(path, repo) {
 /** Create a DocMan instance.
  *  - `path` : Relative or absolute path of the DocMan instance to be created.
  */
-function create(path, name='docman-instance', options={docRepo: undefined}) {
+function create(path, options={empty: false, gitRepo: undefined, name: undefined}) {
+	var originPath = path
 	// Make sure path is absolute path.
 	if (UtilsFile.pathType(path) == 'relative') {
 		path = Path.join(Process.cwd(), path)
 	}
 	// Clone DocMan instance.
-	cloneDocman(path)
+	// cloneDocman(path)
+	// Create DocMan instance.
+	console.log('[DocMan CLI] Create DocMan instance.')
+	UtilsFile.copyFolder(Path.join(UtilsFile.DOCMAN_CLI_PROGRAM, 'static/instance'), Path.join(path), {silence: true})
 	// Install npm dependencies.
-	npmInstall(path)
+	// npmInstall(path)
 	// Register DocMan instance.
-	var ans = UtilsRegister.register(path, name)
-	if (ans.code == 0) {
-		console.log()
-		prettyTable([{name: 'ID', key: 'id'}, {name: 'Name', key: 'name'}, {name: 'Path', key: 'path'}],
-                    [ans.record])
-		console.log()
-	}
-	else if (ans.code == -1) {
-		console.log()
-		console.log(ans.message)
-		console.log()
+	if (options.name != undefined) {
+		console.log('[DocMan CLI] Register DocMan instance.')
+		var ans = UtilsRegister.register(path, options.name)
+		if (ans.code == 0) {
+			console.log()
+			prettyTable([{name: 'ID', key: 'id'}, {name: 'Name', key: 'name'}, {name: 'Path', key: 'path'}],
+						[ans.record])
+			console.log()
+		}
+		else if (ans.code == -1) {
+			console.log()
+			console.log(ans.message)
+			console.log()
+		}
 	}
 	// Clone document project.
-	if (options.docRepo != undefined) {
-		cloneDoc(path, options.docRepo)
+	if (options.gitRepo != undefined) {
+		cloneDoc(path, options.gitRepo)
+		console.log('[DocMan CLI] Run the following command to build your document.')
+		console.log(`    > cd ${originPath}`)
+		console.log('    > npm install')
+		console.log('    > npm run build')
+	}
+	// Create defalut document project.
+	else if (options.empty != true) {
+		console.log('[DocMan CLI] Create default document project.')
+		UtilsFile.copyFolder(Path.join(UtilsFile.DOCMAN_CLI_PROGRAM, 'static/default-docs'), Path.join(path, 'docs'), {silence: true})
+		console.log('[DocMan CLI] Run the following command to build your document.')
+		console.log(`    > cd ${originPath}`)
+		console.log('    > npm install')
+		console.log('    > npm run build')
 	}
 }
 

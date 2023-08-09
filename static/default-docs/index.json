@@ -1,0 +1,14 @@
+{
+	"title": "hello-world",
+	"author": "DocMan Team",
+	"list": [
+		{
+			"title": "欢迎使用 DocMan",
+			"path": "./index.md"
+		},
+		{
+			"title": "编辑目录",
+			"path": "./contents.md"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "docman-instance",
+  "author": "",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "scripts": {
+    "build": "npx doc build"
+  },
+  "dependencies": {
+    "docman-core": "^0.2.0"
+  }
+}

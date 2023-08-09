@@ -5,6 +5,7 @@ const process = require('process')
 
 const USER_HOME = process.env.HOME || process.env.USERPROFILE
 const DOCMAN_CLI = NodePath.join(USER_HOME, '.docman-cli')
+const DOCMAN_CLI_PROGRAM = NodePath.dirname(process.argv[1])
 
 
 function mkdir(path) {
@@ -64,10 +65,58 @@ function pathType(pathString) {
 }
 
 
+// srcPath is the path of asset, can be relative path or absolute path.
+// desPath is the path that asset copy to.
+function copyAsset(srcPath, desPath, options={silence: false}) {
+	// Make sure desDir exist.
+	var desDir = NodePath.dirname(desPath)
+	try {
+		fs.accessSync(desDir)
+	}
+	catch (err) {
+		fs.mkdirSync(desDir, {recursive: true})
+	}
+	if (options.silence != true) {
+		console.log(`Copy: ${srcPath}   -->   ${desPath}`)
+	}
+	fs.copyFileSync(srcPath, desPath)
+	return desPath
+}
+
+
+/**
+ * - `srcPath` : Path of folder.
+ * - `desPath` : Path that folder copy to.
+ */
+function copyFolder(srcPath, desPath, options={silence: false}) {
+	var tasks = [{from: srcPath, to: desPath}]
+	// Level traversal.
+	while (tasks.length > 0) {
+		var task = tasks.shift()
+		var targets = fs.readdirSync(task.from)
+		for (var idx = 0; idx < targets.length; idx += 1) {
+			var target = targets[idx]
+			var from = NodePath.join(task.from, target)
+			var to = NodePath.join(task.to, target)
+			if (fs.statSync(from).isFile()) {
+				copyAsset(from, to, options)
+			}
+			else {
+				tasks.push({from: from, to: to})
+			}
+		}
+	}
+}
+
+
 module.exports = {
+	USER_HOME: USER_HOME,
 	DOCMAN_CLI: DOCMAN_CLI,
+	DOCMAN_CLI_PROGRAM: DOCMAN_CLI_PROGRAM,
 	mkdir: mkdir,
 	writeObjectAsJson: writeObjectAsJson,
 	readJsonAsObject: readJsonAsObject,
-	pathType: pathType
+	pathType: pathType,
+	copyAsset: copyAsset,
+	copyFolder: copyFolder
 }

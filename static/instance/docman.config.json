@@ -1,0 +1,7 @@
+{
+	"inputDir": "./docs",
+
+	"outputDir": "./dist",
+
+	"themeDir": "builtin"
+}

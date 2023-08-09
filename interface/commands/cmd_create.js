@@ -14,10 +14,10 @@ EXAMPLE:
 PATH:
   The path to create a DocMan instance.
 OPTIONS:
-  --docman-repo   : Clone from a specific DocMan repository.
+  --empty         : Do not create defalut document project.
   --git-repo | -g : Git repository of your document project.
   --name | -n     : Name to indentify a DocMan instance in register table.
-  --no-register   : Do not register this instance.
+                    If not specified, the instance will not be register.
 `
 
 
@@ -34,16 +34,17 @@ function execute(argv=['create', '--help']) {
 	else {
 		var path = argv[1]
 		var argDict = {
-			'--docman-repo': undefined,
+			'--empty': undefined,
 			'--git-repo': undefined,
 			'-g': undefined,
 			'--name': undefined,
-			'-n': undefined,
-			'--no-register': undefined
+			'-n': undefined
 		}
 		matchArg(argv, argDict)
-		UtilsCreate.create(path, argDict['--name'] || argDict['-n'] || 'docman-instance', {
-			docRepo: argDict['--git-repo'] || argDict['-g'] || undefined
+		UtilsCreate.create(path, {
+			empty: argDict['--empty'],
+			gitRepo: argDict['--git-repo'] || argDict['-g'] || undefined,
+			name: argDict['--name'] || argDict['-n'] || undefined
 		})
 	}
 }
