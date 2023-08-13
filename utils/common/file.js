@@ -5,7 +5,7 @@ const process = require('process')
 
 const USER_HOME = process.env.HOME || process.env.USERPROFILE
 const DOCMAN_CLI = NodePath.join(USER_HOME, '.docman-cli')
-const DOCMAN_CLI_PROGRAM = NodePath.dirname(process.argv[1])
+const DOCMAN_CLI_PROGRAM = NodePath.join(__dirname, '../..')
 
 
 function mkdir(path) {
