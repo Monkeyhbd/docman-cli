@@ -24,8 +24,8 @@ function show_help() {
 
 
 function execute(argv) {
-	console.log(argv)
-	console.log(__dirname)
+	// console.log(argv)
+	// console.log(__dirname)
 	// Show help message.
 	if (argv.length <= 2 || argv[2] == '--help' || argv[2] == '-h') {
 		show_help()

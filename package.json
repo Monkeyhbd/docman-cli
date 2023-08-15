@@ -1,12 +1,13 @@
 {
   "name": "docman-cli",
-  "author": "Monkeyhbd",
+  "author": "Monkeyhbd <monkeyhbd@163.com> (https://www.monkeyhbd.com)",
   "version": "1.0.0",
-  "description": "CLI management tools of DocMan.",
+  "description": "CLI management tool of DocMan.",
   "bin": {
     "docman": "./main.js"
   },
   "keywords": [
     "DocMan"
-  ]
+  ],
+  "license": "MIT"
 }
