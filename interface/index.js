@@ -1,10 +1,11 @@
 /** Interface Plane to provide user interface. */
 
 const router = require('./router')
+const UtilsFile = require('../utils/common/file')
 
 
 help_message = `
-Help message of DocMan CLI.
+Help message of DocMan CLI (v${UtilsFile.DOCMAN_CLI_VERSION}).
 USAGE:
   > docman [SUBCOMMAND] [TARGET] [OPTIONS]
   > docman [SUBCOMMAND] --help
@@ -29,6 +30,10 @@ function execute(argv) {
 	// Show help message.
 	if (argv.length <= 2 || argv[2] == '--help' || argv[2] == '-h') {
 		show_help()
+		return 0
+	}
+	else if (argv[2] == '--version' || argv[2] == '-v') {
+		console.log(`docman-cli v${UtilsFile.DOCMAN_CLI_VERSION}`)
 		return 0
 	}
 	// Match subcommand.

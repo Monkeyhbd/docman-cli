@@ -6,6 +6,7 @@ const process = require('process')
 const USER_HOME = process.env.HOME || process.env.USERPROFILE
 const DOCMAN_CLI = NodePath.join(USER_HOME, '.docman-cli')
 const DOCMAN_CLI_PROGRAM = NodePath.join(__dirname, '../..')
+const DOCMAN_CLI_VERSION = readJsonAsObject(NodePath.join(DOCMAN_CLI_PROGRAM, 'package.json')).version
 
 
 function mkdir(path) {
@@ -113,6 +114,7 @@ module.exports = {
 	USER_HOME: USER_HOME,
 	DOCMAN_CLI: DOCMAN_CLI,
 	DOCMAN_CLI_PROGRAM: DOCMAN_CLI_PROGRAM,
+	DOCMAN_CLI_VERSION: DOCMAN_CLI_VERSION,
 	mkdir: mkdir,
 	writeObjectAsJson: writeObjectAsJson,
 	readJsonAsObject: readJsonAsObject,
