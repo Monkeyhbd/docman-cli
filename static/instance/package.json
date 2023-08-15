@@ -8,6 +8,6 @@
     "build": "npx doc build"
   },
   "dependencies": {
-    "docman-core": "^0.2.0"
+    "docman-core": "^0.2.3"
   }
 }

@@ -4,10 +4,10 @@ const router = require('./router')
 
 
 help_message = `
-Help message of DocMan CLI (v0.0.1).
+Help message of DocMan CLI.
 USAGE:
   > docman [SUBCOMMAND] [TARGET] [OPTIONS]
-  > docman [SUBCOMMAND]  --help
+  > docman [SUBCOMMAND] --help
   > docman --help
 SUBCOMMAND:
   create     : Create an DocMan instance.

@@ -38,7 +38,7 @@ $ docman create hello-world
 $ docman create hello-world --empty
 ```
 
-安装 npm 依赖：
+进入 DocMan 实例，并安装 npm 依赖：
 
 ```shell
 $ cd hello-world
@@ -47,7 +47,7 @@ $ npm install
 
 ## 构造
 
-在上述步骤均完成之后，即可启动 DocMan 构造文档了：
+在上述步骤均完成之后，即可启动 DocMan 构造文档站点了：
 
 ```shell
 $ npm run build
