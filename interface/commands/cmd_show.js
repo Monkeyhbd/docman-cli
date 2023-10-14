@@ -1,7 +1,9 @@
 /** Show a registered DocMan instance's informations. */
 
-const UtilsInfo = require('../../utils/info')
+const NodePath = require('node:path')
 const InterfaceUtils = require('../utils')
+const UtilsFile = require('../../utils/common/file')
+const UtilsRegister = require('../../utils/register')
 
 
 var HELP_MESSAGE = `
@@ -25,67 +27,89 @@ function execute(argv=['show', '--help']) {
 	}
 	// Name or ID.
 	var alias = argv[1]
-	var sum_info = UtilsInfo.sumInfo(alias)
-	// console.log(JSON.stringify(sum_info))
-	if (sum_info.reg.code == -1) {
-		console.log(`
-No DocMan instance match ${alias}.
-`)
+	var reg = UtilsRegister.readReg()
+	var id = UtilsRegister.getIdByAlias(reg, alias)
+	// Gather register informations.
+	var register_object = reg[id]
+	console.log()
+	InterfaceUtils.prettyInfo([
+		{
+			key: 'Register informations',
+			list: [
+				{
+					key: 'ID',
+					value: id
+				},
+				{
+					key: 'Name',
+					value: register_object.name
+				},
+				{
+					key: 'Path',
+					value: register_object.path
+				},
+				{
+					key: 'Register time',
+					value: (new Date(register_object.registerTime)).toLocaleString()
+				}
+			]
+		}
+	])
+	// Gather instance information.
+	try {
+		var docman_object = UtilsFile.readJsonAsObject(NodePath.join(register_object.path, 'docman.config.json'))
+	}
+	catch {
+		console.log(`docman.config.json doesn't find in register path. Please check!\n`)
 		return 0
 	}
-	else if (sum_info.reg.code == 0) {
-		var info = [
-			{
-				key: 'Register informations',
-				list: [
-					{
-						key: 'ID',
-						value: sum_info.reg.info.id
-					},
-					{
-						key: 'Name',
-						value: sum_info.reg.info.name
-					},
-					{
-						key: 'Path',
-						value: sum_info.reg.info.path
-					},
-					{
-						key: 'Register time',
-						value: (new Date(sum_info.reg.info.registerTime)).toLocaleString()
-					}
-				]
-			}
-		]
-		if (sum_info.ins.code == -1) {
-			console.log()
-			InterfaceUtils.prettyInfo(info)
-			console.log(`docman.config.json doesn't find in register path. Please check!\n`)
-		}
-		else if (sum_info.ins.code == -2) {
-			console.log()
-			InterfaceUtils.prettyInfo(info)
-			console.log(`index.json doesn't find in document directory. Please check!\n`)
-		}
-		else if (sum_info.ins.code == 0) {
-			console.log()
-			info.push({
-				key: 'Instance informations',
-				list: [
-					{
-						key: 'Title',
-						value: sum_info.ins.info.title
-					},
-					{
-						key: 'Author',
-						value: sum_info.ins.info.author
-					}
-				]
-			})
-			InterfaceUtils.prettyInfo(info)
-			console.log()
-		}
+	try {  // v0.2+
+		var package_object = UtilsFile.readJsonAsObject(NodePath.join(register_object.path, 'node_modules/docman-core/package.json'))
 	}
+	catch {  // v0.1
+		var package_object = UtilsFile.readJsonAsObject(NodePath.join(register_object.path, 'package.json'))
+	}
+	InterfaceUtils.prettyInfo([
+		{
+			key: 'Instance informations',
+			list: [
+				{
+					key: 'DocMan core version',
+					value: package_object.version
+				}
+			]
+		}
+	])
+	// Gather document information.
+	try {
+		if (UtilsFile.pathType(docman_object.inputDir) == 'relative') {
+			index_json_path = NodePath.join(register_object.path, docman_object.inputDir, 'index.json')
+		}
+		else {  // Absolute path.
+			index_json_path = NodePath.join(docman_object.inputDir, 'index.json')
+		}
+		var document_object = UtilsFile.readJsonAsObject(index_json_path)
+	}
+	catch {
+		console.log(`index.json doesn't find in document directory. Please check!\n`)
+		return 0
+	}
+	InterfaceUtils.prettyInfo([
+		{
+			key: 'Document informations',
+			list: [
+				{
+					key: 'Title',
+					value: document_object.title
+				},
+				{
+					key: 'Author',
+					value: document_object.author
+				},
+			]
+		}
+	])
+	return 0
 }
 
 
