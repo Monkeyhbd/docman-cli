@@ -20,7 +20,10 @@ function pathType(pathString) {
 }
 
 
-/** Validate the path direct to a DocMan instance. */
+/** Validate the path direct to a DocMan instance.
+ * 
+ *  If `docman.config.json` located in path, return `true`.
+ */
 function validateDocmanPath(path) {
 	try {
 		var docman_config = NodePath.join(path, './docman.config.json')
@@ -223,7 +226,7 @@ function unregister(alias) {
  * - `reg`: Return of `readReg()`.
  * - `alias` : Name or ID to match a registered DocMan instance.
  * 
- *  Return: Register infomation, `undefine` if nothing match `alias`.
+ *  Return: Register ID, `undefine` if nothing match `alias`.
  */
 function getIdByAlias(reg, alias) {
 	var id = undefined
@@ -245,5 +248,6 @@ module.exports = {
 	unregister: unregister,
 	readReg: readReg,
 	writeReg: writeReg,
-	getIdByAlias: getIdByAlias
+	getIdByAlias: getIdByAlias,
+	validateDocmanPath: validateDocmanPath
 }

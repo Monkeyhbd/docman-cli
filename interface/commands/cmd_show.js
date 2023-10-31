@@ -9,7 +9,8 @@ const UtilsRegister = require('../../utils/register')
 var HELP_MESSAGE = `
 Show informations of a DocMan instance.
 USAGE:
-  > docman show [ID|NAME]
+  > docman show
+  > docman show [ID|NAME|PATH]
 EXAMPLE:
   > docman show mydoc-1
 `
@@ -30,31 +31,42 @@ function execute(argv=['show', '--help']) {
 	var reg = UtilsRegister.readReg()
 	var id = UtilsRegister.getIdByAlias(reg, alias)
 	// Gather register informations.
-	var register_object = reg[id]
-	console.log()
-	InterfaceUtils.prettyInfo([
-		{
-			key: 'Register informations',
-			list: [
-				{
-					key: 'ID',
-					value: id
-				},
-				{
-					key: 'Name',
-					value: register_object.name
-				},
-				{
-					key: 'Path',
-					value: register_object.path
-				},
-				{
-					key: 'Register time',
-					value: (new Date(register_object.registerTime)).toLocaleString()
-				}
-			]
+	if (id != undefined) {
+		var register_object = reg[id]
+		console.log()
+		InterfaceUtils.prettyInfo([
+			{
+				key: 'Register informations',
+				list: [
+					{
+						key: 'ID',
+						value: id
+					},
+					{
+						key: 'Name',
+						value: register_object.name
+					},
+					{
+						key: 'Path',
+						value: register_object.path
+					},
+					{
+						key: 'Register time',
+						value: (new Date(register_object.registerTime)).toLocaleString()
+					}
+				]
+			}
+		])
+	}
+	else if (UtilsRegister.validateDocmanPath(alias)) {  // alias maybe a path.
+		register_object = {
+			path: alias
 		}
-	])
+	}
+	else {
+		console.log(`Alias '${alias}' either id, name nor a docman instance path.`)
+		return 1
+	}
 	// Gather instance information.
 	try {
 		var docman_object = UtilsFile.readJsonAsObject(NodePath.join(register_object.path, 'docman.config.json'))
