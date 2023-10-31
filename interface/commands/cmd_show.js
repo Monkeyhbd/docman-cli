@@ -1,6 +1,7 @@
 /** Show a registered DocMan instance's informations. */
 
 const NodePath = require('node:path')
+const NodeProcess = require('node:process')
 const InterfaceUtils = require('../utils')
 const UtilsFile = require('../../utils/common/file')
 const UtilsRegister = require('../../utils/register')
@@ -22,50 +23,67 @@ function showHelp() {
 
 
 function execute(argv=['show', '--help']) {
-	if (argv.length <= 1 || argv[1] == '--help' || argv[1] == '-h') {
+	if (argv.length <= 1) {  // docman show
+		var flag = true
+		for (var path = NodeProcess.cwd(); path != NodePath.dirname(path); path = NodePath.dirname(path)) {
+			if (UtilsRegister.validateDocmanPath(path)) {
+				flag = false
+				var register_object = {
+					path: path
+				}
+			}
+		}
+		if (flag) {
+			console.log('Current directory and its parent is not a docman instance.')
+			showHelp()
+		}
+	}
+	else if (argv[1] == '--help' || argv[1] == '-h') {
 		showHelp()
 		return 0
 	}
-	// Name or ID.
-	var alias = argv[1]
-	var reg = UtilsRegister.readReg()
-	var id = UtilsRegister.getIdByAlias(reg, alias)
-	// Gather register informations.
-	if (id != undefined) {
-		var register_object = reg[id]
-		console.log()
-		InterfaceUtils.prettyInfo([
-			{
-				key: 'Register informations',
-				list: [
-					{
-						key: 'ID',
-						value: id
-					},
-					{
-						key: 'Name',
-						value: register_object.name
-					},
-					{
-						key: 'Path',
-						value: register_object.path
-					},
-					{
-						key: 'Register time',
-						value: (new Date(register_object.registerTime)).toLocaleString()
-					}
-				]
-			}
-		])
-	}
-	else if (UtilsRegister.validateDocmanPath(alias)) {  // alias maybe a path.
-		register_object = {
-			path: alias
+	else {  // docman show ID|NAME|PATH
+		// Name or ID.
+		var alias = argv[1]
+		var reg = UtilsRegister.readReg()
+		var id = UtilsRegister.getIdByAlias(reg, alias)
+		// Gather register informations.
+		if (id != undefined) {
+			var register_object = reg[id]
+			console.log()
+			InterfaceUtils.prettyInfo([
+				{
+					key: 'Register informations',
+					list: [
+						{
+							key: 'ID',
+							value: id
+						},
+						{
+							key: 'Name',
+							value: register_object.name
+						},
+						{
+							key: 'Path',
+							value: register_object.path
+						},
+						{
+							key: 'Register time',
+							value: (new Date(register_object.registerTime)).toLocaleString()
+						}
+					]
+				}
+			])
 		}
-	}
-	else {
-		console.log(`Alias '${alias}' either id, name nor a docman instance path.`)
-		return 1
+		else if (UtilsRegister.validateDocmanPath(alias)) {  // alias maybe a path.
+			var register_object = {
+				path: alias
+			}
+		}
+		else {
+			console.log(`Alias '${alias}' either id, name nor a docman instance path.`)
+			return 1
+		}
 	}
 	// Gather instance information.
 	try {
