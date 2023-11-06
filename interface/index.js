@@ -16,6 +16,7 @@ SUBCOMMAND:
   register   : Register a unregistered DocMan instance.
   show       : Show informations of a DocMan instance.
   unregister : Unregister a registered DocMan instance.
+  update     : Pull document project's update then rebuild it.
 `
 
 

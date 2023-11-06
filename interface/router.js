@@ -5,6 +5,7 @@ var map = {
 	'register': function() { return require('./commands/cmd_register').execute },
 	'unregister': function() { return require('./commands/cmd_unregister').execute },
 	'show': function() { return require('./commands/cmd_show').execute },
+	'update': function() { return require('./commands/cmd_update').execute },
 }
 
 
