@@ -3,6 +3,7 @@
 const NodeChildProcess = require('node:child_process')
 const NodePath = require('node:path')
 const NodeFs = require('node:fs')
+const NodeProcess = require('node:process')
 
 
 const DOCMAN_INSTANCE = NodePath.dirname(__dirname)
@@ -13,4 +14,4 @@ const DOCS = NodePath.isAbsolute(config.inputDir) ? config.inputDir : NodePath.j
 // Pull docs update.
 NodeChildProcess.spawnSync('git', ['pull'], {cwd: DOCS, stdio: 'inherit'})
 // Rebuild website files.
-NodeChildProcess.spawnSync('npx', ['doc', 'build'], {cwd: DOCMAN_INSTANCE, stdio: 'inherit'})
+NodeChildProcess.spawnSync(NodeProcess.platform === "win32" ? "npx.cmd" : 'npx', ['doc', 'build'], {cwd: DOCMAN_INSTANCE, stdio: 'inherit'})
