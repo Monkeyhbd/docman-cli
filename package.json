@@ -1,7 +1,7 @@
 {
   "name": "docman-cli",
   "author": "Monkeyhbd <monkeyhbd@163.com> (https://www.monkeyhbd.com)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI management tool of DocMan.",
   "bin": {
     "docman": "./main.js"
